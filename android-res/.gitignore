@@ -1,6 +1,0 @@
-node_modules/
-android/
-*.jks
-*.keystore
-*.p12
-.DS_Store
