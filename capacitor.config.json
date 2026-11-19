@@ -1,0 +1,12 @@
+{
+  "appId": "sk.mojpsik.hra",
+  "appName": "My Little Puppy",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "moj-psik",
+  "version": "1.0.0",
+  "private": true,
+  "description": "My Little Puppy – hra o starostlivosti o šteniatko",
+  "scripts": {
+    "android:add": "cap add android && node scripts/patch-android.js && cap sync android",
+    "android:sync": "node scripts/patch-android.js && cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.6.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.2"
+  }
+}
