@@ -26,10 +26,11 @@ jobs:
           distribution: temurin
           java-version: 21
 
-            - name: Súhlas s licenciami Android SDK
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+      - name: Licencie Android SDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
 
-      - name: Kontrola tajomstiev (secrets)
+      - name: Kontrola tajomstiev
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -38,12 +39,12 @@ jobs:
         run: |
           for v in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
             if [ -z "${!v}" ]; then
-              echo "::error::Chýba tajomstvo $v. Pridaj ho v Settings > Secrets and variables > Actions (pozri README)."
+              echo "::error::Chyba tajomstvo $v"
               exit 1
             fi
           done
 
-      - name: Inštalácia balíkov
+      - name: Instalacia balikov
         run: npm ci
 
       - name: Vytvorenie Android projektu
@@ -52,12 +53,12 @@ jobs:
           node scripts/patch-android.js
           npx cap sync android
 
-      - name: Podpisový kľúč
+      - name: Podpisovy kluc
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
 
-      - name: Zostavenie (.aab a .apk)
+      - name: Zostavenie aab a apk
         working-directory: android
         env:
           VERSION_CODE: ${{ github.run_number }}
@@ -68,14 +69,14 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew --no-daemon bundleRelease assembleRelease
 
-      - name: Nahrať .aab (na Google Play)
+      - name: Nahrat aab
         uses: actions/upload-artifact@v4
         with:
           name: moj-psik-aab
           path: android/app/build/outputs/bundle/release/*.aab
           if-no-files-found: error
 
-      - name: Nahrať .apk (na vyskúšanie v telefóne)
+      - name: Nahrat apk
         uses: actions/upload-artifact@v4
         with:
           name: moj-psik-apk
