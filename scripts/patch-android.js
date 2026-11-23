@@ -25,7 +25,7 @@ function replaceOnce(src, a, b, label) {
 /* --- build.gradle: verzia + podpisovanie --- */
 edit('build.gradle', (s) => {
   if (s.includes('MOJPSIK')) return s;
-  s = replaceOnce(s, 'versionCode 1\n', 'versionCode (System.getenv("VERSION_CODE") ?: "1").toInteger() // MOJPSIK\n', 'versionCode');
+  s = replaceOnce(s, 'versionCode 1\n', 'versionCode Integer.parseInt(System.getenv("VERSION_CODE") ?: "1") // MOJPSIK\n', 'versionCode');
   s = replaceOnce(s, 'versionName "1.0"', 'versionName (System.getenv("VERSION_NAME") ?: "1.0")', 'versionName');
   s = replaceOnce(s, '    buildTypes {\n        release {\n',
     '    signingConfigs {\n        release {\n            def ksPath = System.getenv("KEYSTORE_PATH")\n            if (ksPath) {\n                storeFile file(ksPath)\n                storePassword System.getenv("KEYSTORE_PASSWORD")\n                keyAlias System.getenv("KEY_ALIAS")\n                keyPassword System.getenv("KEY_PASSWORD")\n            }\n        }\n    }\n    buildTypes {\n        release {\n            if (System.getenv("KEYSTORE_PATH")) { signingConfig signingConfigs.release }\n', 'buildTypes');
