@@ -35,7 +35,8 @@ edit('build.gradle', (s) => {
 /* --- AndroidManifest: iba na výšku --- */
 edit('src/main/AndroidManifest.xml', (s) => {
   if (s.includes('screenOrientation')) return s + '<!-- MOJPSIK -->';
-  return replaceOnce(s, 'android:launchMode="singleTask"', 'android:launchMode="singleTask"\n            android:screenOrientation="portrait"', 'orientation');
+  s = replaceOnce(s, 'android:launchMode="singleTask"', 'android:launchMode="singleTask"\n            android:screenOrientation="portrait"', 'orientation');
+  return replaceOnce(s, '    <!-- Permissions -->', '    <uses-feature android:name="android.hardware.screen.portrait" android:required="false" />\n\n    <!-- Permissions -->', 'uses-feature');
 });
 
 /* --- farba pozadia okna (aby pri okrajoch nebola biela / čierna) --- */
